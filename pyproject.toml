@@ -1,0 +1,49 @@
+[project]
+name = "icloud-calendar-mcp"
+version = "0.1.0"
+description = "MCP server + REST API giving Claude full access to an iCloud Calendar over CalDAV"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "mcp>=2.3,<3",
+    "httpx>=0.27",
+    "lxml>=5",
+    "icalendar>=7.3,<8",
+    "recurring-ical-events>=3.8,<4",
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.30",
+    "pydantic>=2.8",
+    "pydantic-settings>=2.4",
+    "python-dateutil>=2.9",
+    "anyio>=4",
+]
+
+[project.scripts]
+icloud-calendar = "icloud_calendar.__main__:main"
+
+[dependency-groups]
+dev = [
+    "pytest>=8",
+    "pytest-asyncio>=0.24",
+    "radicale>=3.9",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/icloud_calendar"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+
+[tool.ruff]
+line-length = 120
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "SIM"]
+ignore = ["B008", "SIM105", "SIM108"]

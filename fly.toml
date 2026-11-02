@@ -1,0 +1,32 @@
+# Fly.io config. Deploy with:
+#   fly launch --no-deploy --copy-config --name <your-app-name>
+#   fly volumes create data --size 1
+#   fly secrets set ICLOUD_USERNAME=... ICLOUD_APP_PASSWORD=... OWNER_PASSWORD=... API_KEY=... \
+#                   PUBLIC_URL=https://<your-app-name>.fly.dev DEFAULT_TIMEZONE=America/New_York
+#   fly deploy
+app = "icloud-calendar-mcp"
+primary_region = "sjc"
+
+[build]
+
+[env]
+  DATA_DIR = "/data"
+  PORT = "8000"
+
+[[mounts]]
+  source = "data"
+  destination = "/data"
+
+[http_service]
+  internal_port = 8000
+  force_https = true
+  auto_stop_machines = "stop"
+  auto_start_machines = true
+  min_machines_running = 0
+
+  [[http_service.checks]]
+    grace_period = "10s"
+    interval = "30s"
+    method = "GET"
+    path = "/healthz"
+    timeout = "5s"
